@@ -1,9 +1,7 @@
 package com.residenciaTst.AtividadePratica.service;
 
 import com.residenciaTst.AtividadePratica.model.Pauta;
-import com.residenciaTst.AtividadePratica.model.Processo;
 import com.residenciaTst.AtividadePratica.repository.PautaRepository;
-import com.residenciaTst.AtividadePratica.repository.ProcessoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,9 +30,9 @@ public class PautaService {
         }
     }
 
-    public Pauta atualizar(UUID id, Pauta processo){
+    public Pauta atualizar(UUID id, Pauta pauta){
         if(pautaRepository.findById(id).isPresent()){
-            return pautaRepository.save(processo);
+            return pautaRepository.save(pauta);
         }else{
             return null;
         }
