@@ -1,5 +1,9 @@
 package com.residenciaTst.AtividadePratica.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.residenciaTst.AtividadePratica.enums.MeioJulgamento;
 import com.residenciaTst.AtividadePratica.enums.SistemaPauta;
 import lombok.AllArgsConstructor;
@@ -14,6 +18,7 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
 // JPA
 @Entity
 @Table(name = "tb_pauta")
@@ -27,7 +32,11 @@ public class Pauta {
     private LocalDateTime dataSessao;
     private LocalDateTime dataDivulgacao;
     private LocalDateTime dataPublicacao;
-    @OneToMany(mappedBy = "pauta")
+    private LocalDateTime dataCriacao;
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "tb_vinculacao", joinColumns = @JoinColumn(name = "id_pauta",
+            referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "id_processo", referencedColumnName = "id"))
     private Set<Processo> processos;
 
 }

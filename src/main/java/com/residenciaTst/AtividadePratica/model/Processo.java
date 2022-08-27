@@ -1,5 +1,6 @@
 package com.residenciaTst.AtividadePratica.model;
 
+import com.fasterxml.jackson.annotation.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,6 +12,7 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
 // JPA
 @Entity
 @Table(name = "tb_processo")
@@ -24,9 +26,10 @@ public class Processo {
     private String relator;
     @Column(columnDefinition = "TEXT")
     private String resumo;
+    private Long ordem;
     private LocalDateTime dataCriacao;
     @ManyToOne
-    @JoinColumn(name = "pauta_id")
+    @JsonIgnore
     private Pauta pauta;
 
 }
