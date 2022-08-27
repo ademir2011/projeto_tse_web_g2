@@ -1,6 +1,7 @@
 package com.residenciaTst.AtividadePratica.service;
 
 import com.residenciaTst.AtividadePratica.model.Pauta;
+import com.residenciaTst.AtividadePratica.model.Processo;
 import com.residenciaTst.AtividadePratica.repository.PautaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,5 +48,16 @@ public class PautaService {
         }else{
             return false;
         }
+    }
+
+    public Pauta vincularProcesso(Pauta pauta, Processo processo){
+        pauta.getProcessos().add(processo);
+        return pautaRepository.save(pauta);
+
+    }
+
+    public Pauta desvincularProcesso(Pauta pauta, Processo processo){
+        pauta.getProcessos().remove(processo);
+        return pautaRepository.save(pauta);
     }
 }
