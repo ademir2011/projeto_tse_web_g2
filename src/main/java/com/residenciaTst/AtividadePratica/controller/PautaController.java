@@ -7,6 +7,7 @@ import com.residenciaTst.AtividadePratica.service.ProcessoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,12 +24,14 @@ public class PautaController {
     ProcessoService processoService;
 
     @GetMapping(path = "/pautas")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<List<Pauta>> listarTodos(){
         return ResponseEntity.status(HttpStatus.OK)
                 .body(pautaService.listarTodos());
     }
 
     @GetMapping(path = "/pauta/{id}")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<Pauta> listarPeloId(@PathVariable UUID id){
         Pauta pauta = pautaService.listarPeloId(id);
         if(pauta != null){
@@ -39,12 +42,14 @@ public class PautaController {
     }
 
     @PostMapping(path = "/pauta")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<Pauta> salvar(@RequestBody Pauta pauta){
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(pautaService.salvar(pauta));
     }
 
     @PutMapping(path = "/pauta/{id}")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<Pauta> atualizar(@PathVariable UUID id,  @RequestBody Pauta pauta){
         Pauta pautaAtualizado = pautaService.atualizar(id, pauta);
         if(pautaAtualizado != null){
@@ -55,6 +60,7 @@ public class PautaController {
     }
 
     @DeleteMapping("/pauta/{id}")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<?> deletarPeloId(@PathVariable UUID id){
         if(pautaService.deletarPeloId(id)){
             return ResponseEntity.status(HttpStatus.OK).body("Deletado com sucesso");
@@ -64,6 +70,7 @@ public class PautaController {
     }
 
     @PostMapping(path = "/pauta/{id}/processo")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<Pauta> vincularProceso(@PathVariable UUID id, @RequestBody Processo processo){
         Pauta pauta = pautaService.listarPeloId(id);
         Processo processoBuscado = processoService.listarPeloId(processo.getId());
@@ -76,6 +83,7 @@ public class PautaController {
     }
 
     @DeleteMapping(path = "/pauta/{id}/processo")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<Pauta> desvincularProcesso(@PathVariable UUID id, @RequestBody Processo processo){
         Pauta pauta = pautaService.listarPeloId(id);
         Processo processoBuscado = processoService.listarPeloId(processo.getId());
