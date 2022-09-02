@@ -21,19 +21,25 @@ public class AtividadePraticaApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception
 	{
-		// Inserting the data in the mysql table.
-		Role roleUser = Role.builder()
-				.name(ERole.ROLE_USER)
-				.build();
-		Role roleAdmin = Role.builder()
-				.name(ERole.ROLE_ADMIN)
-				.build();
-		Role roleMode = Role.builder()
-				.name(ERole.ROLE_MODERATOR)
-				.build();
-		// ob.save() method
-		roleRepository.save(roleUser);
-		roleRepository.save(roleAdmin);
-		roleRepository.save(roleMode);
+		if(!roleRepository.findByName(String.valueOf(ERole.ROLE_USER)).isPresent() &&
+				!roleRepository.findByName(String.valueOf(ERole.ROLE_ADMIN)).isPresent() &&
+				!roleRepository.findByName(String.valueOf(ERole.ROLE_MODERATOR)).isPresent()
+		){
+			// Inserindo os dados
+			Role roleUser = Role.builder()
+					.name(ERole.ROLE_USER)
+					.build();
+			Role roleAdmin = Role.builder()
+					.name(ERole.ROLE_ADMIN)
+					.build();
+			Role roleMode = Role.builder()
+					.name(ERole.ROLE_MODERATOR)
+					.build();
+			// ob.save() method
+			roleRepository.save(roleUser);
+			roleRepository.save(roleAdmin);
+			roleRepository.save(roleMode);
+		}
+
 	}
 }
