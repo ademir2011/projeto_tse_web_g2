@@ -69,9 +69,12 @@ public class PautaService {
         int ordem = 0;
         // Adicionar os processos a pauta
         for(int i = 0; i < processos.size(); i++){
+            if(!pauta.getProcessos().contains(processos.get(i))){
+                pauta.getProcessos().add(processos.get(i));
+            }
             processos.get(i).setOrdem(Long.valueOf(i+1));
             processoRepository.save(processos.get(i));
-            pauta.getProcessos().add(processos.get(i));
+
         }
 
         return pautaRepository.save(pauta);
