@@ -84,6 +84,20 @@ public class PautaController {
         }
     }
 
+    @PostMapping(path = "/pauta/{id}/listProcessos")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    public ResponseEntity<Pauta> vincularListProceso(@PathVariable UUID id, @RequestBody List<Processo> processos){
+        Pauta pauta = pautaService.listarPeloId(id);
+
+        if((pauta != null)){
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(pautaService.vincularListProcesso(pauta, processos));
+        }else{
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
+
+
     @DeleteMapping(path = "/pauta/{id}/processo")
 //    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<Pauta> desvincularProcesso(@PathVariable UUID id, @RequestBody Processo processo){

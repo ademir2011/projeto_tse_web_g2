@@ -66,8 +66,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .authorizeRequests().antMatchers("/api/pauta/**").permitAll()
 //                .antMatchers(HttpMethod.GET, "/api/pautas").permitAll()
 //                .antMatchers(HttpMethod.GET, "/api/processos").permitAll()
-                .antMatchers("/swagger-ui/**").permitAll()
-                .anyRequest().authenticated();
+                .antMatchers("/swagger-ui/**").permitAll();
+//                .anyRequest().authenticated();
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
