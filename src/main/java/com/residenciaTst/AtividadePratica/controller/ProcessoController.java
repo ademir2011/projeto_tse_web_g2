@@ -5,13 +5,17 @@ import com.residenciaTst.AtividadePratica.service.ProcessoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
 
+//@CrossOrigin(originPatterns = "${spring.application.originPatterns}", allowCredentials = "true", maxAge = 3600)
+
 @RestController
 @RequestMapping(path = "/api")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class ProcessoController {
 
     @Autowired
@@ -23,7 +27,15 @@ public class ProcessoController {
                 .body(processoService.listarTodos());
     }
 
+    @GetMapping(path = "/processosSemVinculo")
+    public ResponseEntity<List<Processo>> listarTodosSemVinculo(){
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(processoService.listarTodosSemVinculo());
+    }
+
+
     @GetMapping(path = "/processo/{id}")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<Processo> listarPeloId(@PathVariable UUID id){
         Processo processo = processoService.listarPeloId(id);
         if(processo != null){
@@ -34,12 +46,14 @@ public class ProcessoController {
     }
 
     @PostMapping(path = "/processo")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<Processo> salvar(@RequestBody Processo processo){
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(processoService.salvar(processo));
     }
 
     @PutMapping(path = "/processo/{id}")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<Processo> atualizar(@PathVariable UUID id,  @RequestBody Processo processo){
         Processo processoAtualizado = processoService.atualizar(id, processo);
         if(processoAtualizado != null){
@@ -50,6 +64,7 @@ public class ProcessoController {
     }
 
     @DeleteMapping("/processo/{id}")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<?> deletarPeloId(@PathVariable UUID id){
         if(processoService.deletarPeloId(id)){
             return ResponseEntity.status(HttpStatus.OK).body("Deletado com sucesso");

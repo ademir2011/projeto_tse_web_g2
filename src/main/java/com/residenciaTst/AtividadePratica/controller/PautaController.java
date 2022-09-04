@@ -13,8 +13,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
+//@CrossOrigin(originPatterns = "${spring.application.originPatterns}",
+//        allowCredentials = "true", maxAge = 3600)
 @RestController
 @RequestMapping(path = "/api")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class PautaController {
 
     @Autowired
@@ -24,7 +27,6 @@ public class PautaController {
     ProcessoService processoService;
 
     @GetMapping(path = "/pautas")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<List<Pauta>> listarTodos(){
         return ResponseEntity.status(HttpStatus.OK)
                 .body(pautaService.listarTodos());
@@ -83,7 +85,7 @@ public class PautaController {
     }
 
     @DeleteMapping(path = "/pauta/{id}/processo")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<Pauta> desvincularProcesso(@PathVariable UUID id, @RequestBody Processo processo){
         Pauta pauta = pautaService.listarPeloId(id);
         Processo processoBuscado = processoService.listarPeloId(processo.getId());

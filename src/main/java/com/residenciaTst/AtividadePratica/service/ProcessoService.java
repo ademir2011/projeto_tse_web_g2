@@ -24,6 +24,10 @@ public class ProcessoService {
         return processoRepository.findAll();
     }
 
+    public List<Processo> listarTodosSemVinculo(){
+        return processoRepository.findAllSemViculo();
+    }
+
     public Processo listarPeloId(UUID id){
         if(processoRepository.findById(id).isPresent()){
             return processoRepository.findById(id).get();
