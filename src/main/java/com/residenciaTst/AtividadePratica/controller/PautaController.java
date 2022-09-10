@@ -1,15 +1,18 @@
 package com.residenciaTst.AtividadePratica.controller;
 
+import com.residenciaTst.AtividadePratica.dto.PautaDto;
 import com.residenciaTst.AtividadePratica.model.Pauta;
 import com.residenciaTst.AtividadePratica.model.Processo;
 import com.residenciaTst.AtividadePratica.service.PautaService;
 import com.residenciaTst.AtividadePratica.service.ProcessoService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
@@ -45,7 +48,9 @@ public class PautaController {
 
     @PostMapping(path = "/pauta")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-    public ResponseEntity<Pauta> salvar(@RequestBody Pauta pauta){
+    public ResponseEntity<Pauta> salvar(@RequestBody @Valid PautaDto pautaDto){
+        Pauta pauta = Pauta.builder().build();
+        BeanUtils.copyProperties(pautaDto, pauta);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(pautaService.salvar(pauta));
     }

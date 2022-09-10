@@ -33,5 +33,4 @@ public class Processo {
     @ManyToOne
     @JsonIgnore
     private Pauta pauta;
-
 }
