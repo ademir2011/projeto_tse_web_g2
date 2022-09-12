@@ -39,7 +39,6 @@ pipelines:
           services:
             - docker
           script:
-            - curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
             - heroku container:login
             - heroku container:push web -a $HEROKU_APP_NAME
             - heroku container:release web -a $HEROKU_APP_NAME
