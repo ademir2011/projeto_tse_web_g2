@@ -12,4 +12,4 @@ WORKDIR /build/libs
 
 #RUN javac Main.java
 
-CMD ["java", "-Dspring.profiles.active=dev", "-jar", "AtividadePratica-0.0.1-SNAPSHOT.jar"]
+CMD ["java", "-Dspring.profiles.active=prod", "-jar", "AtividadePratica-0.0.1-SNAPSHOT.jar"]
