@@ -6,6 +6,7 @@ import com.residenciaTst.AtividadePratica.model.User;
 import com.residenciaTst.AtividadePratica.repository.RoleRepository;
 import com.residenciaTst.AtividadePratica.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -25,6 +26,13 @@ public class AtividadePraticaApplication implements CommandLineRunner {
 
 	@Autowired
 	PasswordEncoder encoder;
+
+	@Value("${spring.app.usernameAdmin}")
+	private String username;
+	@Value("${spring.app.emailAdmin}")
+	private String email;
+	@Value("${spring.app.passwordAdmin}")
+	private String password;
 
 	public static void main(String[] args) {
 		SpringApplication.run(AtividadePraticaApplication.class, args);
@@ -60,9 +68,9 @@ public class AtividadePraticaApplication implements CommandLineRunner {
 
 			// Criando um usuário admin
 			User user = User.builder()
-					.username("admin")
-					.email("admin@gmail.com")
-					.password(encoder.encode("admin"))
+					.username(username)
+					.email(email)
+					.password(encoder.encode(password))
 					.roles(roles)
 					.build();
 
