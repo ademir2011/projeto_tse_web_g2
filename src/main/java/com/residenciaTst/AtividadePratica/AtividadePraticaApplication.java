@@ -73,8 +73,6 @@ public class AtividadePraticaApplication implements CommandLineRunner {
 					.password(encoder.encode(password))
 					.roles(roles)
 					.build();
-
-
 			userRepository.save(user);
 
 		}
