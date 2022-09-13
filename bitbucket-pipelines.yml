@@ -34,11 +34,24 @@ pipelines:
                 # See more security tools at https://bitbucket.org/product/features/pipelines/integrations?&category=security
                 - pipe: atlassian/git-secrets-scan:0.5.1
       - step:
+          name: Create artifact
+          script:
+            - git archive --format=tar.gz master -o application.tar.gz
+          artifacts:
+            - application.tar.gz
+      - step:
           name: Push docker image to the Heroku
           deployment: Production
           services:
             - docker
           script:
-            - heroku container:login
-            - heroku container:push web -a $HEROKU_APP_NAME
-            - heroku container:release web -a $HEROKU_APP_NAME
+            - pipe: atlassian/heroku-deploy:2.0.0
+              variables:
+                HEROKU_API_KEY: $HEROKU_API_KEY
+                HEROKU_APP_NAME: $HEROKU_APP_NAME
+                ZIP_FILE: application.tar.gz
+                WAIT: 'true'
+#          script:
+#            - heroku container:login
+#            - heroku container:push web -a $HEROKU_APP_NAME
+#            - heroku container:release web -a $HEROKU_APP_NAME
