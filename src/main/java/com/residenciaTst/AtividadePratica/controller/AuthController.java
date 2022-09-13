@@ -11,9 +11,13 @@ import com.residenciaTst.AtividadePratica.model.User;
 import com.residenciaTst.AtividadePratica.repository.RoleRepository;
 import com.residenciaTst.AtividadePratica.repository.UserRepository;
 import com.residenciaTst.AtividadePratica.service.UserDetailsImpl;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -28,6 +32,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 //@CrossOrigin(originPatterns = "${spring.application.originPatterns}", allowCredentials = "true", maxAge = 3600)
+@Tag(name = "Usuários", description = "Rotas sobre Usuários")
 @RestController
 @RequestMapping("/api/auth")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -43,6 +48,7 @@ public class AuthController {
     @Autowired
     JwtUtils jwtUtils;
 
+    @Operation(summary = "Rota para realizar autenticação de um usuário")
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
@@ -61,7 +67,12 @@ public class AuthController {
                 userDetails.getEmail(),
                 roles));
     }
+
+    @Operation(summary = "Rota para realizar o cadastro de um usuário", security = @SecurityRequirement(name = "bearerAuth"))
     @PostMapping("/signup")
+    // Por enquanto que não tem a parte do cadastro de usuário no frontend
+    // comentar esta linha posteriormente
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
             return ResponseEntity

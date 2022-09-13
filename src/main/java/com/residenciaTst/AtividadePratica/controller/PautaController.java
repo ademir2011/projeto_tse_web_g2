@@ -5,6 +5,9 @@ import com.residenciaTst.AtividadePratica.model.Pauta;
 import com.residenciaTst.AtividadePratica.model.Processo;
 import com.residenciaTst.AtividadePratica.service.PautaService;
 import com.residenciaTst.AtividadePratica.service.ProcessoService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +21,7 @@ import java.util.UUID;
 
 //@CrossOrigin(originPatterns = "${spring.application.originPatterns}",
 //        allowCredentials = "true", maxAge = 3600)
+@Tag(name = "Pautas", description = "Rotas sobre Pautas")
 @RestController
 @RequestMapping(path = "/api")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -29,12 +33,14 @@ public class PautaController {
     @Autowired
     ProcessoService processoService;
 
+    @Operation(summary = "Rota para buscar todas as pautas")
     @GetMapping(path = "/pautas")
     public ResponseEntity<List<Pauta>> listarTodos(){
         return ResponseEntity.status(HttpStatus.OK)
                 .body(pautaService.listarTodos());
     }
 
+    @Operation(summary = "Rota para buscar uma pauta pelo ID", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping(path = "/pauta/{id}")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<Pauta> listarPeloId(@PathVariable UUID id){
@@ -46,6 +52,7 @@ public class PautaController {
         }
     }
 
+    @Operation(summary = "Rota para salvar uma pauta", security = @SecurityRequirement(name = "bearerAuth"))
     @PostMapping(path = "/pauta")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<Pauta> salvar(@RequestBody @Valid PautaDto pautaDto){
@@ -55,6 +62,7 @@ public class PautaController {
                 .body(pautaService.salvar(pauta));
     }
 
+    @Operation(summary = "Rota para atualizar uma pauta", security = @SecurityRequirement(name = "bearerAuth"))
     @PutMapping(path = "/pauta/{id}")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<Pauta> atualizar(@PathVariable UUID id,  @RequestBody Pauta pauta){
@@ -66,6 +74,7 @@ public class PautaController {
         }
     }
 
+    @Operation(summary = "Rota para deletar uma pauta pelo ID", security = @SecurityRequirement(name = "bearerAuth"))
     @DeleteMapping("/pauta/{id}")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<?> deletarPeloId(@PathVariable UUID id){
@@ -76,6 +85,7 @@ public class PautaController {
         }
     }
 
+    @Operation(summary = "Rota para vincular um processo a uma pauta", security = @SecurityRequirement(name = "bearerAuth"))
     @PostMapping(path = "/pauta/{id}/processo")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<Pauta> vincularProceso(@PathVariable UUID id, @RequestBody Processo processo){
@@ -89,6 +99,7 @@ public class PautaController {
         }
     }
 
+    @Operation(summary = "Rota para vincular vários processos a uma pauta", security = @SecurityRequirement(name = "bearerAuth"))
     @PostMapping(path = "/pauta/{id}/listProcessos")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<Pauta> vincularListProceso(@PathVariable UUID id, @RequestBody List<Processo> processos){
@@ -102,7 +113,7 @@ public class PautaController {
         }
     }
 
-
+    @Operation(summary = "Rota para desvincular um processo a uma pauta", security = @SecurityRequirement(name = "bearerAuth"))
     @DeleteMapping(path = "/pauta/{id}/processo")
 //    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<Pauta> desvincularProcesso(@PathVariable UUID id, @RequestBody Processo processo){
