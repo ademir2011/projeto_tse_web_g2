@@ -4,6 +4,8 @@ import com.residenciaTst.AtividadePratica.dto.ProcessoDto;
 import com.residenciaTst.AtividadePratica.model.Processo;
 import com.residenciaTst.AtividadePratica.service.ProcessoService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.BeanUtils;
@@ -43,6 +45,8 @@ public class ProcessoController {
     }
 
     @Operation(summary = "Rota para buscar um processo pelo ID", security = @SecurityRequirement(name = "bearerAuth"))
+    @ApiResponse(responseCode = "401", description = "Não autorizado",
+            content = @Content)
     @GetMapping(path = "/processo/{id}")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<Processo> listarPeloId(@PathVariable UUID id){
@@ -55,6 +59,8 @@ public class ProcessoController {
     }
 
     @Operation(summary = "Rota para salvar um processo", security = @SecurityRequirement(name = "bearerAuth"))
+    @ApiResponse(responseCode = "401", description = "Não autorizado",
+            content = @Content)
     @PostMapping(path = "/processo")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<Processo> salvar(@RequestBody @Valid ProcessoDto processoDto){
@@ -65,6 +71,8 @@ public class ProcessoController {
     }
 
     @Operation(summary = "Rota para atualizar um processo", security = @SecurityRequirement(name = "bearerAuth"))
+    @ApiResponse(responseCode = "401", description = "Não autorizado",
+            content = @Content)
     @PutMapping(path = "/processo/{id}")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<Processo> atualizar(@PathVariable UUID id,  @RequestBody Processo processo){
@@ -77,6 +85,8 @@ public class ProcessoController {
     }
 
     @Operation(summary = "Rota para deletar um processo", security = @SecurityRequirement(name = "bearerAuth"))
+    @ApiResponse(responseCode = "401", description = "Não autorizado",
+            content = @Content)
     @DeleteMapping("/processo/{id}")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<?> deletarPeloId(@PathVariable UUID id){

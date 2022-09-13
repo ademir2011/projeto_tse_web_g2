@@ -6,6 +6,8 @@ import com.residenciaTst.AtividadePratica.model.Processo;
 import com.residenciaTst.AtividadePratica.service.PautaService;
 import com.residenciaTst.AtividadePratica.service.ProcessoService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.BeanUtils;
@@ -41,6 +43,8 @@ public class PautaController {
     }
 
     @Operation(summary = "Rota para buscar uma pauta pelo ID", security = @SecurityRequirement(name = "bearerAuth"))
+    @ApiResponse(responseCode = "401", description = "Não autorizado",
+            content = @Content)
     @GetMapping(path = "/pauta/{id}")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<Pauta> listarPeloId(@PathVariable UUID id){
@@ -53,6 +57,8 @@ public class PautaController {
     }
 
     @Operation(summary = "Rota para salvar uma pauta", security = @SecurityRequirement(name = "bearerAuth"))
+    @ApiResponse(responseCode = "401", description = "Não autorizado",
+            content = @Content)
     @PostMapping(path = "/pauta")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<Pauta> salvar(@RequestBody @Valid PautaDto pautaDto){
@@ -63,6 +69,8 @@ public class PautaController {
     }
 
     @Operation(summary = "Rota para atualizar uma pauta", security = @SecurityRequirement(name = "bearerAuth"))
+    @ApiResponse(responseCode = "401", description = "Não autorizado",
+            content = @Content)
     @PutMapping(path = "/pauta/{id}")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<Pauta> atualizar(@PathVariable UUID id,  @RequestBody Pauta pauta){
@@ -75,6 +83,8 @@ public class PautaController {
     }
 
     @Operation(summary = "Rota para deletar uma pauta pelo ID", security = @SecurityRequirement(name = "bearerAuth"))
+    @ApiResponse(responseCode = "401", description = "Não autorizado",
+            content = @Content)
     @DeleteMapping("/pauta/{id}")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<?> deletarPeloId(@PathVariable UUID id){
@@ -86,6 +96,8 @@ public class PautaController {
     }
 
     @Operation(summary = "Rota para vincular um processo a uma pauta", security = @SecurityRequirement(name = "bearerAuth"))
+    @ApiResponse(responseCode = "401", description = "Não autorizado",
+            content = @Content)
     @PostMapping(path = "/pauta/{id}/processo")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<Pauta> vincularProceso(@PathVariable UUID id, @RequestBody Processo processo){
@@ -100,6 +112,8 @@ public class PautaController {
     }
 
     @Operation(summary = "Rota para vincular vários processos a uma pauta", security = @SecurityRequirement(name = "bearerAuth"))
+    @ApiResponse(responseCode = "401", description = "Não autorizado",
+            content = @Content)
     @PostMapping(path = "/pauta/{id}/listProcessos")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<Pauta> vincularListProceso(@PathVariable UUID id, @RequestBody List<Processo> processos){
