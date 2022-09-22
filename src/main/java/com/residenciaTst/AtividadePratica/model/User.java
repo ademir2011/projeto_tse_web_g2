@@ -10,34 +10,42 @@ import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
 
-@Data
+
 @Builder
+@Data
 @RequiredArgsConstructor
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper=false)
 @Entity
 @Table(	name = "users",
         uniqueConstraints = {
                 @UniqueConstraint(columnNames = "username"),
                 @UniqueConstraint(columnNames = "email")
         })
-public class User {
+public class User extends AbstractEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @NonNull
     @NotBlank
     @Size(max = 20)
     private String username;
+
     @NonNull
     @NotBlank
     @Size(max = 50)
     @Email
     private String email;
+
     @NonNull
     @NotBlank
     @Size(max = 120)
     private String password;
+
+    @Builder.Default
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(	name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),

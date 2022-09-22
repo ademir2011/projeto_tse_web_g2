@@ -6,10 +6,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.residenciaTst.AtividadePratica.enums.MeioJulgamento;
 import com.residenciaTst.AtividadePratica.enums.SistemaPauta;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -20,25 +17,35 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper=false)
 @JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
-// JPA
 @Entity
 @Table(name = "tb_pauta")
-public class Pauta {
+public class Pauta extends AbstractEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
+
     private String orgaoJudicante;
+
     private SistemaPauta sistemaPauta;
+
     private MeioJulgamento meioJulgamento;
+
     private LocalDateTime dataSessao;
+
     private LocalDateTime dataDivulgacao;
+
     private LocalDateTime dataPublicacao;
+
     private LocalDateTime dataCriacao;
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "tb_vinculacao", joinColumns = @JoinColumn(name = "id_pauta",
-            referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "id_processo", referencedColumnName = "id"))
+
+    @ManyToMany
+    @JoinTable(
+            name = "tb_relatorio",
+            joinColumns = @JoinColumn(name = "pauta_id"),
+            inverseJoinColumns = @JoinColumn(name = "processo_id"))
     private Set<Processo> processos;
 
 }
