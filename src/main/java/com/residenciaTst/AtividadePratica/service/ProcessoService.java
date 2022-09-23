@@ -28,6 +28,10 @@ public class ProcessoService {
         return processoRepository.findAllSemViculo();
     }
 
+    public List<Processo> findProcessoByRelatorAndNumero(String relator){
+        return processoRepository.findProcessoByRelatorAndNumero(relator);
+    }
+
     public Processo listarPeloId(UUID id){
         if(processoRepository.findById(id).isPresent()){
             return processoRepository.findById(id).get();

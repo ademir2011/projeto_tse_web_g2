@@ -12,4 +12,7 @@ import java.util.UUID;
 public interface ProcessoRepository extends JpaRepository <Processo, UUID> {
     @Query(value = "SELECT * FROM tb_processo WHERE id NOT IN (SELECT id_processo FROM tb_vinculacao)", nativeQuery = true)
     public List<Processo> findAllSemViculo();
+
+    @Query(value = " SELECT * from Processo u where u.relator = ?1",nativeQuery = true)
+    public List<Processo> findProcessoByRelatorAndNumero( String relator);
 }

@@ -44,6 +44,13 @@ public class ProcessoController {
                 .body(processoService.listarTodosSemVinculo());
     }
 
+    @Operation(summary = "Rota para buscar o relator e o processo")
+    @GetMapping(path = "/relator")
+    public ResponseEntity<List<Processo>> findProcessoByRelatorAndNumero(@RequestParam(value = "relator") String relator){
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(processoService.findProcessoByRelatorAndNumero(relator));
+    }
+
     @Operation(summary = "Rota para buscar um processo pelo ID", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponse(responseCode = "401", description = "Não autorizado",
             content = @Content)
