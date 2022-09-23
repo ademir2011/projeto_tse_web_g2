@@ -3,6 +3,7 @@ package com.residenciaTst.AtividadePratica.controller;
 import com.residenciaTst.AtividadePratica.dto.PautaDto;
 import com.residenciaTst.AtividadePratica.model.Pauta;
 import com.residenciaTst.AtividadePratica.model.Processo;
+import com.residenciaTst.AtividadePratica.repository.PautaRepository;
 import com.residenciaTst.AtividadePratica.service.PautaService;
 import com.residenciaTst.AtividadePratica.service.ProcessoService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -35,6 +36,9 @@ public class PautaController {
     @Autowired
     ProcessoService processoService;
 
+    @Autowired
+    PautaRepository pautaRepository;
+
     @Operation(summary = "Rota para buscar todas as pautas")
     @GetMapping(path = "/pautas")
     public ResponseEntity<List<Pauta>> listarTodos(){
@@ -54,6 +58,22 @@ public class PautaController {
         }else{
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
+    }
+
+
+    @Operation(summary = "Rota para buscar os processos no orgão judicante")
+    @GetMapping(path = "/orgaoJudicante/{nameOrgao}")
+    public ResponseEntity<Object> listarPautasPorOrgao(@PathVariable("nameOrgao") String name){
+        List<Pauta> pautas = pautaRepository.findByOrgaoJudicante(name);
+
+        if(pautas != null) {
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(pautas);
+        } else {
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body("nao foi encontrada nenhuma pauta!");
+        }
+
     }
 
     @Operation(summary = "Rota para salvar uma pauta", security = @SecurityRequirement(name = "bearerAuth"))

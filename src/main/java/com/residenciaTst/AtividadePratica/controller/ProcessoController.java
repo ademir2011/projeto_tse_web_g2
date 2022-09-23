@@ -58,6 +58,7 @@ public class ProcessoController {
         }
     }
 
+
     @Operation(summary = "Rota para salvar um processo", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponse(responseCode = "401", description = "Não autorizado",
             content = @Content)
